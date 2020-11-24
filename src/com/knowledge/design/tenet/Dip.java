@@ -1,4 +1,4 @@
-package com.knowledge.design;
+package com.knowledge.design.tenet;
 
 /**
  * 依赖倒置原则
