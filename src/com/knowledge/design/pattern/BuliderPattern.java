@@ -26,6 +26,9 @@ public class BuliderPattern {
         BuilderProduct construct = b.construct();
         String name = construct.getName();
         System.out.println(name);
+
+
+        Computer computer=new Computer.ComputerBuilder().Cpu("R7-5800x").build();
     }
 }
 
@@ -84,5 +87,61 @@ class BuilderDirector{
         builder.builderName();
         return builder.getResult();
     }
-
 }
+
+    /**
+     * 进阶版
+      */
+class Computer{
+    Computer(String cpu,String screen,String hhd,String board){
+        this.CPU= cpu;
+        this.Screen = screen;
+        this.HHD = hhd;
+        this.Board = board;
+    }
+
+    private String CPU;
+
+    private String Screen;
+
+    private String HHD;
+
+    private String Board;
+
+
+
+    public  static class ComputerBuilder{
+        private String CPU;
+
+        private String Screen;
+
+        private String HHD;
+
+        private String Board;
+
+        public  ComputerBuilder Cpu(String cpu){
+            this.CPU = cpu;
+            return this;
+        }
+        public  ComputerBuilder Screen(String screen){
+            this.Screen = screen;
+            return this;
+        }
+        public ComputerBuilder HHD(String hhd){
+            this.HHD = hhd;
+            return this;
+        }
+        public ComputerBuilder Board(String board){
+            this.Board = board;
+            return this;
+        }
+        public Computer build(){
+            return new Computer(this.CPU,this.Screen,this.HHD,this.Board);
+        }
+    }
+
+
+    }
+
+
+
