@@ -1,4 +1,4 @@
-package com.knowledge.design.tenet;
+package com.knowledge.design.pattern;
 
 /**
  * 职责链模式
