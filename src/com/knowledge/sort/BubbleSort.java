@@ -36,8 +36,27 @@ public class BubbleSort {
 
     public static void main(String[] args) {
         int[] no = new int[]{1,6,3,9,12,5,2};
-        for (int tb : bubbleSort(no)) {
+        for (int tb : bubbleSort(no,no.length)) {
             System.out.println(tb);
         }
     }
+
+
+    public static int[] bubbleSort(int[] arr,int len)
+    {
+        int j,tmp;
+        for (int i = 0; i < len; i++) {
+            for (j = 1 ; j <len-i ; j++) {
+                if (arr[j-1]>arr[j]){
+                    tmp = arr[j];
+                    arr[j] = arr[j-1];
+                    arr[j-1] = tmp;
+                }
+            }
+        }
+        return arr;
+    }
+
+
+
 }

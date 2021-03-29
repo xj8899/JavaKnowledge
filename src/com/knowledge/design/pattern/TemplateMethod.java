@@ -19,6 +19,8 @@ import java.math.BigDecimal;
  *      3、抽象方法：在抽象类中声明，由具体子类实现。
  *      4、具体方法：在抽象类中已经实现，在具体子类中可以继承或重写它。
  *      5、钩子方法：在抽象类中已经实现，包括用于判断的逻辑方法和需要子类重写的空方法两种。
+ * 示例
+ *      1、Thread中的run与start
  *
  */
 public class TemplateMethod {
@@ -36,6 +38,10 @@ public class TemplateMethod {
         b.Collection(a,150);
         System.out.println("Amoney:"+a.getMoney());
         System.out.println("Bmoney:"+b.getMoney());
+
+        Runnable target;
+        Thread t = new Thread();
+        t.start();
     }
 
 
@@ -62,8 +68,6 @@ abstract class AbstractTest{
         BigDecimal bigDecimal = convertDecimal(nb1);
         subtract(obj,bigDecimal);
     }
-
-
 
     private BigDecimal convertDecimal(int nb){
         return new BigDecimal(nb);
