@@ -1,6 +1,8 @@
 package com.knowledge.design.pattern;
 
 
+import java.util.concurrent.atomic.AtomicReference;
+
 /**
  * 模式：对象创建模式
  * 单例方法
@@ -36,15 +38,26 @@ package com.knowledge.design.pattern;
  */
 public class Singleton {
 
+    Singleton(){}
 
     public static void main(String[] args) {
-        HungrySingleton hungrySingleton = HungrySingleton.getInstance();
-        LazySingleton lazySingleton = LazySingleton.getInstance();
-        SyncLazySingleton syncLazySingleton = SyncLazySingleton.getInstance();
+        //饿汉模式
+        Singleton hungrySingleton = HungrySingleton.getInstance();
+        //懒汉模式
+        Singleton lazySingleton = LazySingleton.getInstance();
+        //线程安全懒汉模式
+        Singleton syncLazySingleton = SyncLazySingleton.getInstance();
+        //静态内部类
+        Singleton internalSingleton = InternalSingleton.getInstance();
+        //双重校验
+        Singleton doubleCheckSingleton = DoubleCheckSingleton.getInstance();
+        //CAS单例获取
+        Singleton atomicReferenceSingleton = AtomicReferenceSingleton.getInstance();
     }
 
 
 }
+
 
 /**
  * 饿汉模式
@@ -60,14 +73,14 @@ class HungrySingleton{
 
     }
 
-    private static final HungrySingleton hungrySingleton = new HungrySingleton();
+    private static final Singleton hungrySingleton = new Singleton();
 
     /**
      * 获取实例
      * 模式：饿汉模式
      * @return
      */
-    public static HungrySingleton getInstance(){
+    public static Singleton getInstance(){
         return hungrySingleton;
     }
 
@@ -87,11 +100,11 @@ class LazySingleton{
 
     }
 
-    private static LazySingleton lazySingleton = null;
+    private static Singleton lazySingleton = null;
 
-    public static LazySingleton getInstance(){
+    public static Singleton getInstance(){
         if (lazySingleton==null){
-            lazySingleton = new LazySingleton();
+            lazySingleton = new Singleton();
         }
         return lazySingleton;
     }
@@ -107,12 +120,12 @@ class SyncLazySingleton{
 
     }
 
-    private static volatile SyncLazySingleton syncLazySingleton = null;
+    private static volatile Singleton syncLazySingleton = null;
 
-    public static synchronized SyncLazySingleton getInstance(){
+    public static synchronized Singleton getInstance(){
 
         if (syncLazySingleton == null){
-            syncLazySingleton = new SyncLazySingleton();
+            syncLazySingleton = new Singleton();
         }
         return syncLazySingleton;
     }
@@ -132,10 +145,75 @@ class InternalSingleton{
     InternalSingleton(){}
 
     private static class InternalSingletonIntance{
-        private static InternalSingleton internalSingleton = new InternalSingleton();
+        private static Singleton internalSingleton = new Singleton();
     }
 
-    private static InternalSingleton getInstance(){
+    public static Singleton getInstance(){
         return InternalSingletonIntance.internalSingleton;
     }
+}
+
+
+/**
+ * 双重锁懒汉模式
+ * 双重锁的⽅式是⽅法级锁的优化，减少了部分获取实例的耗时。
+ * 同时这种⽅式也满⾜了懒加载。
+ */
+class DoubleCheckSingleton{
+
+    private static Singleton  doubleCheckSingleton = null;
+
+
+    public static Singleton getInstance(){
+        if (doubleCheckSingleton==null){
+            synchronized (DoubleCheckSingleton.class){
+                if (doubleCheckSingleton==null){
+                    doubleCheckSingleton = new Singleton();
+                }
+            }
+        }
+        return doubleCheckSingleton;
+    }
+}
+
+
+/**
+ * CAS单例模式
+ * java并发库提供了很多原⼦类来⽀持并发访问的数据安全
+ * 性； AtomicInteger 、 AtomicBoolean 、 AtomicLong 、 AtomicReference 。
+ * AtomicReference 可以封装引⽤⼀个V实例，⽀持并发访问如上的单例⽅式就是使⽤了这样的⼀个
+ * 特点。
+ * 使⽤CAS的好处就是不需要使⽤传统的加锁⽅式保证线程安全，⽽是依赖于CAS的忙等算法，依赖
+ * 于底层硬件的实现，来保证线程安全。相对于其他锁的实现没有线程的切换和阻塞也就没有了额外
+ * 的开销，并且可以⽀持较⼤的并发性。
+ * 当然CAS也有⼀个缺点就是忙等，如果⼀直没有获取到将会处于死循环中。
+ */
+class AtomicReferenceSingleton{
+
+    private static Singleton atomicReferenceSingleton = null;
+
+    private static final AtomicReference<Singleton> INSTANCE = new AtomicReference<>();
+
+
+    public static Singleton getInstance(){
+
+        if (atomicReferenceSingleton == null){
+            for (;;) {
+                Singleton atomicReferenceSingleton = INSTANCE.get();
+                if (atomicReferenceSingleton == null){
+                    INSTANCE.compareAndSet(null,new Singleton());
+                }else{
+                    return INSTANCE.get();
+                }
+            }
+        }
+
+        return atomicReferenceSingleton;
+    }
+
+}
+
+
+enum EnumSingleton{
+
 }

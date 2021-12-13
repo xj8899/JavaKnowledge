@@ -1,10 +1,6 @@
-package com.knowledge.basis.reflection;
+package com.knowledge.basic.reflection;
 
-import sun.tools.asm.CatchData;
-
-import javax.sound.midi.Soundbank;
 import java.lang.reflect.*;
-import java.util.Calendar;
 
 /**
  * 反射
@@ -21,7 +17,7 @@ public class Reflection {
     public static void main(String[] args) {
         Class person = null;
         try {
-            person =  Class.forName("com.knowledge.basis.reflection.Student");
+            person =  Class.forName("com.knowledge.basic.reflection.Student");
 //            method(person);
             method1(person);
         }catch (Exception e){
